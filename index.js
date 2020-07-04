@@ -5,13 +5,14 @@ const appConfig = require('./app.config.js');
 const argvOptions = require('./argv.config.js');
 
 const args = argv.option(argvOptions).run();
-const port = args.options.port || 3000;
+const port = 3080;
 
 io.set('origins', '*:*');
 
 const roomClientsMap = {};
 
 io.on('connection', (socket) => {
+  console.log('someone has joined the room')
   socket.on('create or join', (applyMessage) => {
     let roomClients = 0;
     const appliedRoom = applyMessage.room;
@@ -43,6 +44,7 @@ io.on('connection', (socket) => {
      * Handle all communication message
      */
     socket.on('communication', (message) => {
+      console.log('message on communitcation', message);
       switch (message.type) {
         case 'offer':
         case 'answer':
@@ -68,3 +70,4 @@ io.on('connection', (socket) => {
 });
 
 io.listen(port);
+console.log('starting');
